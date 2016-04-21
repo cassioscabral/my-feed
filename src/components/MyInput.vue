@@ -7,7 +7,8 @@
 <script>
 import {
   MdlButton,
-  MdlTextfield
+  MdlTextfield,
+  MdlRippleEffect
 } from 'vue-mdl'
 // TODO
 // add props and make the name generic
@@ -15,6 +16,9 @@ export default {
   components: {
     MdlButton,
     MdlTextfield
+  },
+  directives: {
+    MdlRippleEffect
   },
   data () {
     return {
