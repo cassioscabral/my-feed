@@ -1,0 +1,7 @@
+{
+  "preset": "google",
+  "esnext": true,
+  "disallowSemicolons": true,
+  "requireSemicolons": false,
+  "requireCamelCaseOrUpperCaseIdentifiers": false
+}
