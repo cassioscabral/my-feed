@@ -1,12 +1,14 @@
 <template>
-  <h3>Save something to read/watch/do later</h3>
-  <div class="my-input">
-    <mdl-textfield
-      label="New Entry"
-      floating-label="New Entry"
-      :value.sync="entry"
-      @keyup.enter="addEntry"
-    >
+<div class="my-input">
+  <h3>Save something to read/watch/listen/do later</h3>
+  Entries: {{entries | json}}
+  <br>
+  <mdl-textfield
+    label="New Entry"
+    floating-label="New Entry"
+    :value.sync="entry"
+    @keyup.enter="addEntry"
+  >
   </mdl-textfield>
   <mdl-button
     v-mdl-ripple-effect
@@ -22,14 +24,24 @@
   <mdl-textfield
     label="Title"
     floating-label="Title"
-    :value.sync="myTitle"
+    :value.sync="title"
     v-show="entry"
+    @keyup.enter="addEntry"
+  >
+  </mdl-textfield>
+  <br>
+  <mdl-textfield
+    label="Note"
+    floating-label="Note"
+    :value.sync="note"
+    v-show="entry"
+    @keyup.enter="addEntry"
   >
   </mdl-textfield>
   <div class="preview-card" v-show="matches">
-    <my-card :entry="entry" :title="myTitle" type='youtube'></my-card>
+    <my-card :entry="entry" :title="title" :note="note" type="youtube"></my-card>
   </div>
-  </div>
+</div>
 </template>
 <script>
 import MyCard from './MyCard'
@@ -58,17 +70,23 @@ export default {
       // preserves its current state and we are modifying
       // its initial state.
       entry: '',
-      myTitle: ' ' // WITHOUT A VALUE IT DOES NOT RENDERING
+      title: '',
+      note: '',
+      entries: []
     }
   },
   methods: {
     addEntry () {
-      window.alert(this.title)
+      this.entries.push({
+        entry: this.entry,
+        title: this.title,
+        note: this.note
+      })
     }
   },
   computed: {
     matches () {
-      // TODO matches all kind of links, blog, youtube, etc
+      // TODO should match all kind of links, blog, youtube, podcast, etc
       return YOUTUBE_REGEX.test(this.entry)
     }
   }

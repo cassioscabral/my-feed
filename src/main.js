@@ -7,6 +7,5 @@ new Vue({
   el: 'body',
   components: {App},
   data: {
-    checked: false
   }
 })

@@ -1,18 +1,48 @@
 <template>
-  <mdl-card class="demo-card-welcome" :title="title" :supporting-text="supportingText" :media="imageUrl" v-if="imageUrl">
-  </mdl-card>
+  <div id="my-card">
+    <div class="mdl-card mdl-shadow--2dp">
+      <slot name="title">
+        <div class="mdl-card__title" style="background: url('{{titleBackgroundURL}}') center / cover">
+          <h2 class="mdl-card__title-text">{{title}}</h2>
+        </div>
+      </slot>
+      <slot name="subtitle" v-if="subtitle">
+        <div class="mdl-card__subtitle-text">{{subtitle}}</div>
+      </slot>
+      <slot name="supporting-text" v-if="note">
+        <div class="mdl-card__supporting-text">{{note}}</div>
+      </slot>
+      <slot name="media" v-if="media">
+        <div class="mdl-card__media"><img :src="media"/></div>
+      </slot>
+      <slot name="actions" v-if="actions">
+        <div class="mdl-card__actions mdl-card--border">
+          <mdl-anchor-button colored="colored" v-if="isActionsURL" :href="actions" :target="actionsTarget" class="mdl-js-ripple-effect">{{actionsText}}
+          </mdl-anchor-button>
+          <mdl-button colored="colored" v-else="v-else" class="mdl-js-ripple-effect">{{actionsText}}</mdl-button>
+        </div>
+      </slot>
+      <!-- TODO some way of creating a menu or action-->
+      <slot name="menu" v-if="menu">
+        <div class="mdl-card__menu">
+          <mdl-button icon="icon" @click="triggerMenuEvent" class="mdl-js-ripple-effect"><i class="material-icons">share</i></mdl-button>
+        </div>
+      </slot>
+    </div>
+  </div>
 </template>
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 import {
-  MdlCard
+  MdlCard,
+  MdlButton
 } from 'vue-mdl'
 
-Vue.use(require('vue-resource'))
+// Vue.use(require('vue-resource'))
 
 function _getYoutubeVideoID (URL) {
   const VIDEO_ID_REGEX = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/
-  return URL.match(VIDEO_ID_REGEX)[1]
+  return VIDEO_ID_REGEX.test(URL) && URL.match(VIDEO_ID_REGEX)[1]
 }
 
 // TODO move all the functions getting url to a proper module
@@ -35,11 +65,12 @@ function getYoutubePreviewURL (URL) {
 //     return 'Youtube Title'
 //   })
 // }
-
+// props: ['title', 'entry', 'type'],
 export default {
-  props: ['title', 'entry', 'type'],
+  props: ['title', 'entry', 'type', 'note'],
   components: {
-    MdlCard
+    MdlCard,
+    MdlButton
   },
   directives: {
   },
@@ -49,36 +80,33 @@ export default {
       // with hot-reload because the reloaded component
       // preserves its current state and we are modifying
       // its initial state.
-      supportingText: 'Support Text'
     }
   },
   methods: {
   },
   computed: {
-    imageUrl () {
-      if (this.entry.length <= 0) { return }
+    titleBackgroundURL () {
       // TODO use debounce
-      let imageUrl = ''
       if (this.type === 'youtube') {
         // this.title = getYoutubeTitle(this.entry, this.$http)
         return getYoutubePreviewURL(this.entry)
       }
-      return imageUrl
+      return false
     }
   }
 
 }
 </script>
 <style>
-.demo-card-welcome.mdl-card {
+.mdl-card {
   width: 512px;
 }
-.demo-card-welcome .mdl-card__title,
-.demo-card-welcome .mdl-card__menu {
+.mdl-card__title,
+.mdl-card__menu {
   color: white;
 }
-.demo-card-welcome .mdl-card__title {
-  height: 60px;
+.mdl-card__title {
+  height: 180px;
   background-color: rgba(85, 0, 249, 0.71);
 }
 </style>
